@@ -150,6 +150,7 @@ class Command(object):
         self.context = {}
         self.metadata = {}
         self.parser = None
+        self.disabled = False
 
         self.update(*args, **kwargs)
 
@@ -173,6 +174,7 @@ class Command(object):
             oob=False,
             context=None,
             parser=False,
+            disabled=False,
             **kwargs):
         self.triggers += aliases or []
 
@@ -211,6 +213,7 @@ class Command(object):
         self.is_regex = is_regex
         self.oob = oob
         self.context = context or {}
+        self.disabled = disabled
         self.metadata = kwargs
 
         if parser:
@@ -281,6 +284,11 @@ class Command(object):
             Whether this command was successful
         """
         parsed_kwargs = {}
+
+        if self.disabled:
+            raise CommandError(u'Command {} has been disabled!'.format(
+                event.name
+            ))
 
         if self.args:
             if len(event.args) < self.args.required_length:
