@@ -90,6 +90,7 @@ class BotConfig(Config):
     commands_allow_edit = True
     commands_level_getter = None
     commands_group_abbrev = True
+    commands_no_permission = None
 
     plugin_config_provider = None
     plugin_config_format = 'json'
@@ -390,6 +391,8 @@ class Bot(LoggingClass):
 
         for command, match in commands:
             if not self.check_command_permissions(command, msg):
+                if self.config.commands_no_permission:
+                    msg.reply(self.config.commands_no_permission)
                 continue
 
             if command.plugin.execute(CommandEvent(command, msg, match)):
