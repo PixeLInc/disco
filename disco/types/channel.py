@@ -334,6 +334,13 @@ class Channel(SlottedModel, Permissible):
         """
         return self.client.api.channels_messages_create(self.id, *args, **kwargs)
 
+    def send_typing(self):
+        """
+        Sends a typing event to this channel. See `APIClient.channels_typing`
+        for more information.
+        """
+        self.client.api.channels_typing(self.id)
+
     def connect(self, *args, **kwargs):
         """
         Connect to this channel over voice.
@@ -387,7 +394,7 @@ class Channel(SlottedModel, Permissible):
                 self.delete_message(msg)
 
     def delete(self, **kwargs):
-        assert (self.is_dm or self.guild.can(self.client.state.me, Permissions.MANAGE_GUILD)), 'Invalid Permissions'
+        assert (self.is_dm or self.guild.can(self.client.state.me, Permissions.MANAGE_CHANNELS)), 'Invalid Permissions'
         self.client.api.channels_delete(self.id, **kwargs)
 
     def close(self):
