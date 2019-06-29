@@ -715,6 +715,7 @@ class MessageReactionRemoveAll(GatewayEvent):
     def guild(self):
         return self.channel.guild
 
+
 @wraps_model(User)
 class UserUpdate(GatewayEvent):
     """
