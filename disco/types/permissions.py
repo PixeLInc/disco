@@ -11,6 +11,7 @@ class Permissions(BitsetMap):
     ADD_REACTIONS = 1 << 6
     VIEW_AUDIT_LOG = 1 << 7
     PRIORITY_SPEAKER = 1 << 8
+    STREAM = 1 << 9
     READ_MESSAGES = 1 << 10
     SEND_MESSAGES = 1 << 11
     SEND_TSS_MESSAGES = 1 << 12

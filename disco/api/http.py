@@ -125,6 +125,10 @@ class Routes(object):
     INVITES_GET = (HTTPMethod.GET, INVITES + '/{invite}')
     INVITES_DELETE = (HTTPMethod.DELETE, INVITES + '/{invite}')
 
+    # Voice
+    VOICE = '/voice'
+    VOICE_REGIONS_LIST = (HTTPMethod.GET, VOICE + '/regions')
+
     # Webhooks
     WEBHOOKS = '/webhooks/{webhook}'
     WEBHOOKS_GET = (HTTPMethod.GET, WEBHOOKS)
@@ -203,18 +207,18 @@ class HTTPClient(LoggingClass):
             sys.version_info.micro)
 
         self.limiter = RateLimiter()
-        self.headers = {
+        self.after_request = after_request
+
+        self.session = requests.Session()
+        self.session.headers.update({
             'User-Agent': 'DiscordBot (https://github.com/b1naryth1ef/disco {}) Python/{} requests/{}'.format(
                 disco_version,
                 py_version,
                 requests_version),
-        }
+        })
 
         if token:
-            self.headers['Authorization'] = 'Bot ' + token
-
-        self.after_request = after_request
-        self.session = requests.Session()
+            self.session.headers['Authorization'] = 'Bot ' + token
 
     def __call__(self, route, args=None, **kwargs):
         return self.call(route, args, **kwargs)
@@ -251,12 +255,6 @@ class HTTPClient(LoggingClass):
         """
         args = args or {}
         retry = kwargs.pop('retry_number', 0)
-
-        # Merge or set headers
-        if 'headers' in kwargs:
-            kwargs['headers'].update(self.headers)
-        else:
-            kwargs['headers'] = self.headers
 
         # Build the bucket URL
         args = {k: to_bytes(v) for k, v in six.iteritems(args)}
