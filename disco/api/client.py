@@ -209,6 +209,11 @@ class APIClient(LoggingClass):
     def channels_messages_delete_bulk(self, channel, messages):
         self.http(Routes.CHANNELS_MESSAGES_DELETE_BULK, dict(channel=channel), json={'messages': messages})
 
+    def channels_message_embeds_suppress(self, channel, message, suppress):
+        self.http(Routes.CHANNELS_MESSAGES_EMBEDS_SUPPRESS, dict(channel=channel, message=message), json={
+            'suppress': suppress,
+        })
+
     def channels_messages_reactions_get(self, channel, message, emoji, after=None, limit=100):
         r = self.http(
             Routes.CHANNELS_MESSAGES_REACTIONS_GET,

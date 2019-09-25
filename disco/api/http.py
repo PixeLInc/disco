@@ -46,6 +46,7 @@ class Routes(object):
     CHANNELS_MESSAGES_MODIFY = (HTTPMethod.PATCH, CHANNELS + '/messages/{message}')
     CHANNELS_MESSAGES_DELETE = (HTTPMethod.DELETE, CHANNELS + '/messages/{message}')
     CHANNELS_MESSAGES_DELETE_BULK = (HTTPMethod.POST, CHANNELS + '/messages/bulk_delete')
+    CHANNELS_MESSAGES_EMBEDS_SUPPRESS = (HTTPMethod.POST, CHANNELS + '/messages/{message}/suppress-embeds')
     CHANNELS_MESSAGES_REACTIONS_GET = (HTTPMethod.GET, CHANNELS + '/messages/{message}/reactions/{emoji}')
     CHANNELS_MESSAGES_REACTIONS_CREATE = (HTTPMethod.PUT, CHANNELS + '/messages/{message}/reactions/{emoji}/@me')
     CHANNELS_MESSAGES_REACTIONS_DELETE_ALL = (HTTPMethod.DELETE, CHANNELS + '/messages/{message}/reactions')
