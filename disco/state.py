@@ -151,8 +151,12 @@ class State(object):
                 (not self.users[user_id].cached_dms or self.client.config.shard_count == 1)):
             if self.users[user_id].cached_dms:
                 for dm in self.users[user_id].cached_dms:
-                    if dm in self.dms:
-                        del self.dms[dm]
+                    # If any of the DM's other recipients are cached then we will leave the DM object in the cache.
+                    if dm not in self.dms or any([user in self.users for user
+                                                  in six.iterkeys(self.dms[dm].recipients) if user != user_id]):
+                        continue
+
+                    del self.dms[dm]
                     if dm in self.channels:
                         del self.channels[dm]
 
@@ -275,6 +279,7 @@ class State(object):
             self.guilds[event.channel.guild_id].channels[event.channel.id] = event.channel
         elif event.channel.is_dm:
             self.dms[event.channel.id] = event.channel
+            self.channels[event.channel.id] = event.channel
             for recipient in six.iterkeys(event.channel.recipients):
                 if recipient in self.users:
                     if self.users[recipient].cached_dms is UNSET:
@@ -303,7 +308,7 @@ class State(object):
                 if recipient in self.users and self.users[recipient].cached_dms is not UNSET:
                     self.users[recipient].cached_dms.discard(event.channel.id)
 
-                self.remove_expired_user(event.user.id)
+                self.remove_expired_user(recipient)
 
             if event.channel.id in self.dms:
                 del self.dms[event.channel.id]
@@ -355,7 +360,9 @@ class State(object):
         if event.member.guild_id not in self.guilds:
             return
 
-        if self.guilds[event.member.guild_id].member_count is not UNSET:
+        if (self.guilds[event.member.guild_id].member_count is not UNSET and
+            # Avoid adding duplicate events to member_count.
+                event.member.id not in self.guilds[event.member.guild_id].members):
             self.guilds[event.member.guild_id].member_count += 1
 
         self.guilds[event.member.guild_id].members[event.member.id] = event.member
@@ -374,7 +381,9 @@ class State(object):
         if event.guild_id not in self.guilds:
             return
 
-        if self.guilds[event.guild_id].member_count is not UNSET:
+        if (self.guilds[event.guild_id].member_count is not UNSET and
+            # Avoid subtracting duplicate events from member_count.
+                event.user.id in self.guilds[event.guild_id].members):
             self.guilds[event.guild_id].member_count -= 1
 
         if event.user.id in self.guilds[event.guild_id].members:
@@ -460,6 +469,7 @@ class State(object):
             self.users[user.id] = user
             if event.guild_id:
                 self.users[user.id].cached_guilds = {event.guild_id}
+
             self.add_associated_dms(user.id)
 
         # Some updates come with a guild_id and roles the user is in, we should
