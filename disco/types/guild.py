@@ -379,7 +379,7 @@ class Guild(SlottedModel, Permissible):
     roles = AutoDictField(Role, 'id')
     emojis = AutoDictField(GuildEmoji, 'id')
     features = ListField(str)
-    mfa_level = Field(int)
+    mfa_level = Field(enum(MFALevel))
     application_id = Field(snowflake)
     widget_enabled = Field(bool)
     widget_channel_id = Field(snowflake)
@@ -397,7 +397,7 @@ class Guild(SlottedModel, Permissible):
     description = Field(text)
     banner = Field(text)
     premium_tier = Field(int, default=0)
-    premium_subscription_count = Field(int, default=0)
+    premium_subscription_count = Field(enum(premium_tier), default=None)
     system_channel_flags = Field(int)
     preferred_locale = Field(str)
 
