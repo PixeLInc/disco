@@ -12,7 +12,7 @@ class Permissions(BitsetMap):
     VIEW_AUDIT_LOG = 1 << 7
     PRIORITY_SPEAKER = 1 << 8
     STREAM = 1 << 9
-    READ_MESSAGES = 1 << 10
+    VIEW_CHANNEL = 1 << 10
     SEND_MESSAGES = 1 << 11
     SEND_TSS_MESSAGES = 1 << 12
     MANAGE_MESSAGES = 1 << 13
