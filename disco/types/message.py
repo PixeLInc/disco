@@ -365,7 +365,7 @@ class MessageEmbed(SlottedModel):
         data = super(MessageEmbed, self).to_dict()
         # Ensure message create and edit api calls don't try to send datetime objects.
         if iso and isinstance(data.get("timestamp"), real_datetime):
-            data["timestamp"] = date["timestamp"].isoformat()
+            data["timestamp"] = data["timestamp"].isoformat()
 
         return data
 
