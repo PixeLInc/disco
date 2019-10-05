@@ -106,9 +106,9 @@ class Status(object):
 
 
 class ClientStatus(SlottedModel):
-    DESKTOP = Field(text)
-    MOBILE = Field(text)
-    WEB = Field(text)
+    desktop = Field(text)
+    mobile = Field(text)
+    web = Field(text)
 
 
 class ActivityParty(SlottedModel):
