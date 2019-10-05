@@ -155,7 +155,7 @@ class APIClient(LoggingClass):
             payload['content'] = content
 
         if embed:
-            payload['embed'] = embed.to_dict()
+            payload['embed'] = embed.to_dict(iso=True)
 
         if attachments:
             if len(attachments) > 1:
@@ -187,7 +187,7 @@ class APIClient(LoggingClass):
             payload['content'] = content
 
         if embed:
-            payload['embed'] = embed.to_dict()
+            payload['embed'] = embed.to_dict(iso=True)
 
         r = self.http(Routes.CHANNELS_MESSAGES_MODIFY,
                       dict(channel=channel, message=message),

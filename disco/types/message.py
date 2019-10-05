@@ -4,6 +4,8 @@ import warnings
 import functools
 import unicodedata
 
+from datetime import datetime as real_datetime
+
 from disco.types.base import (
     BitsetMap, BitsetValue, SlottedModel, Field, ListField, AutoDictField,
     snowflake, text, datetime, enum, cached_property,
@@ -359,6 +361,13 @@ class MessageEmbed(SlottedModel):
         """
         self.fields.append(MessageEmbedField(*args, **kwargs))
 
+    def to_dict(self, iso=False):
+        data = super(MessageEmbed, self).to_dict()
+        # Ensure message create and edit api calls don't try to send datetime objects.
+        if iso and isinstance(data.get("timestamp"), real_datetime):
+            data["timestamp"] = date["timestamp"].isoformat()
+
+        return data
 
 class MessageAttachment(SlottedModel):
     """
