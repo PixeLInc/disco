@@ -338,6 +338,7 @@ class MessageEmbed(SlottedModel):
 
         return data
 
+
 class MessageAttachment(SlottedModel):
     """
     Message attachment object.
