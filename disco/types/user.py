@@ -4,6 +4,7 @@ from disco.types.base import (
     SlottedModel, Field, snowflake, text, with_equality, with_hash, enum, ListField,
     cached_property,
 )
+from disco.types.emoji import Emoji
 
 
 class DefaultAvatars(object):
@@ -159,6 +160,7 @@ class Activity(SlottedModel):
     application_id = Field(text)
     details = Field(text)
     state = Field(text)
+    emoji = Field(Emoji)
     party = Field(ActivityParty)
     assets = Field(ActivityAssets)
     secrets = Field(ActivitySecrets)

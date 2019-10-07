@@ -11,7 +11,7 @@ from disco.types.base import (
 from disco.types.user import User
 from disco.types.voice import VoiceState
 from disco.types.channel import Channel, ChannelType
-from disco.types.message import Emoji
+from disco.types.emoji import Emoji
 from disco.types.permissions import PermissionValue, Permissions, Permissible
 
 
