@@ -172,5 +172,5 @@ class Presence(SlottedModel):
     game = Field(Activity)
     guild_id = Field(snowflake)
     status = Field(enum(Status))
-    activity = Field(Activity, 'application_id')
+    activities = ListField(Activity)
     client_status = Field(ClientStatus)
